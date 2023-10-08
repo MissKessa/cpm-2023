@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -15,14 +17,14 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
 import uo.cpm.p3.model.Product;
 import uo.cpm.p3.service.McDonalds;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 
 /**
  * This class builds the main window of an McDonalds application with:
@@ -36,10 +38,14 @@ import javax.swing.JTextArea;
  * <p>
  * -a text field for the price, with its corresponding label
  * <p>
- * -3 buttons: add (to add the product to the order), next (to go for the next
- * window) and cancel (to exit the program)
+ * -4 buttons: add (to add the product to the order), next (to go for the next
+ * window), remove (to remove a product) and cancel (to exit the program)
  * <p>
  * -a text field for the units added and it's label
+ * <p>
+ * -a scroll pane with a text area to show the order
+ * <p>
+ * -a label that shows the order (text area) when you click on it
  * 
  * 
  * @author Paula
@@ -115,9 +121,21 @@ public class MainWindow extends JFrame {
 	 * It's the label for the discount image
 	 */
 	private JLabel lblDiscountImage;
+	/**
+	 * It's the button for removing products
+	 */
 	private JButton btnRemove;
+	/**
+	 * It's the scrollPane that contains the text area for showing the order
+	 */
 	private JScrollPane scrollPane;
+	/**
+	 * It's the label that shows the order when you click on it
+	 */
 	private JLabel lblOrder;
+	/**
+	 * It's the text area that shows the order
+	 */
 	private JTextArea txtAreaOrder;
 
 	/**
@@ -142,11 +160,10 @@ public class MainWindow extends JFrame {
 		setResizable(false);
 		setTitle("McDonald's Spain");
 		setBounds(100, 100, 633, 419);
-		
-		
+
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		getContentPane().setLayout(null);
-		
+
 		getContentPane().add(getLblLogo());
 		getContentPane().add(getLblMcDonalds());
 		getContentPane().add(getLblProducts());
@@ -224,6 +241,11 @@ public class MainWindow extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					spUnits.setValue(1);
 					txtUnitsAdded.setText(null);
+
+					if (Integer.parseInt(getMcDonalds().getUnits((Product) cbProducts.getSelectedItem())) <= 0)
+						btnRemove.setEnabled(false);
+					btnRemove.setEnabled(true);
+
 				}
 			});
 			cbProducts.setModel(new DefaultComboBoxModel<Product>(mcDonalds.getMenuProducts()));
@@ -259,42 +281,6 @@ public class MainWindow extends JFrame {
 			spUnits.setBounds(319, 180, 62, 28);
 		}
 		return spUnits;
-	}
-
-	/**
-	 * Sets the label, background and foreground for the button for adding the
-	 * products
-	 * 
-	 * @return the button for adding the products
-	 */
-	private JButton getBtnAdd() {
-		if (btnAdd == null) {
-			btnAdd = new JButton("Add");
-			btnAdd.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					Product selectedProduct = (Product) cbProducts.getSelectedItem();
-					Integer units = (Integer) spUnits.getValue(); // because we put it on the model of the spinner that
-																	// works with Integers
-					mcDonalds.addToOrder(selectedProduct, units);
-					txtPrice.setText(String.format("%.2f", mcDonalds.getOrderTotal()) + " \u20AC"); // " \u20AC"
-																									// -unicode for €
-					if (mcDonalds.isDiscountApplied()) {
-						lblDiscountImage.setIcon(
-								new ImageIcon(MainWindow.class.getResource("/uo/cpm/p3/ui/img/HappyOffer22_23.png")));
-					}
-					btnNext.setEnabled(true);
-					spUnits.setValue(1);
-					txtUnitsAdded.setText(mcDonalds.getUnits(selectedProduct));
-				}
-			});
-			btnAdd.setMnemonic('A');
-			btnAdd.setToolTipText("Adds the selected item to the order");
-			btnAdd.setBackground(new Color(0, 128, 0));
-			btnAdd.setForeground(new Color(255, 255, 255));
-			btnAdd.setBounds(402, 182, 89, 23);
-		}
-		return btnAdd;
 	}
 
 	/**
@@ -368,7 +354,7 @@ public class MainWindow extends JFrame {
 	 * Sets the name, foreground, background, and the action when the button is
 	 * clicked (it closes the window, and the app is closed)
 	 * 
-	 * @return
+	 * @return the cancel button
 	 */
 	private JButton getBtnCancel() {
 		if (btnCancel == null) {
@@ -380,7 +366,7 @@ public class MainWindow extends JFrame {
 			btnCancel.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					///System.exit(0); // to end the app if you click on cancel
+					/// System.exit(0); // to end the app if you click on cancel
 					initialize();
 				}
 			});
@@ -429,41 +415,109 @@ public class MainWindow extends JFrame {
 	private JLabel getLblDiscountImage() {
 		if (lblDiscountImage == null) {
 			lblDiscountImage = new JLabel("");
-			lblDiscountImage.setIcon(null);
+			lblDiscountImage
+					.setIcon(new ImageIcon(MainWindow.class.getResource("/uo/cpm/p3/ui/img/HappyOffer22_23.png")));
+			lblDiscountImage.setVisible(false);
 			lblDiscountImage.setBounds(384, 215, 225, 122);
 		}
 		return lblDiscountImage;
 	}
+
+	/**
+	 * Checks if the user wants to exit the program by showing a confirmation window
+	 * 
+	 * @return true if the user wants to exit the program (clicks on the Yes button)
+	 */
 	private boolean checkExit() {
-		if (JOptionPane.showConfirmDialog(this, "Are you sure you want to leave and cancel the order?") == JOptionPane.YES_OPTION) {
+		if (JOptionPane.showConfirmDialog(this,
+				"Are you sure you want to leave and cancel the order?") == JOptionPane.YES_OPTION) {
 			return true;
 		}
 		return false;
 	}
+
+	/**
+	 * It initialize the program for the next costumer (it sets all the components
+	 * to their initial value and closes all the dialogs)
+	 */
 	public void initialize() {
-		if (rF!=null) { //2º dialog is open, so I need to close it
-			if (rF.getcD() !=null) { //3º dialog is open, so I need to close it
-				rF.getcD().dispose(); //close the 3º dialog and tell the garbage collector to take all the resources
+		if (rF != null) { // 2º dialog is open, so I need to close it
+			if (rF.getcD() != null) { // 3º dialog is open, so I need to close it
+				rF.getcD().dispose(); // close the 3º dialog and tell the garbage collector to take all the resources
 			}
-			rF.dispose(); //close the 2º dialog and tell the garbage collector to take all the resources
+			rF.dispose(); // close the 2º dialog and tell the garbage collector to take all the resources
 		}
-		//now all the dialogs are closed
-		//now reinitialize the mainWidnow
+		// now all the dialogs are closed
+		// now reinitialize the mainWidnow
 		mcDonalds.initOrder();
 		getCbProducts().setSelectedIndex(0);
 		getSpUnits().setValue(1);
 		getTxtPrice().setText("");
 		getBtnNext().setEnabled(false);
-		
+
 	}
+
+	/**
+	 * Sets the label, background and foreground for the button for adding the
+	 * products, action when you click...
+	 * 
+	 * @return the button for adding the products
+	 */
+	private JButton getBtnAdd() {
+		if (btnAdd == null) {
+			btnAdd = new JButton("Add");
+			btnAdd.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					Product selectedProduct = (Product) cbProducts.getSelectedItem();
+					Integer units = (Integer) spUnits.getValue(); // because we put it on the model of the spinner that
+																	// works with Integers
+					mcDonalds.addToOrder(selectedProduct, units);
+					txtPrice.setText(String.format("%.2f", mcDonalds.getOrderTotal()) + " \u20AC"); // " \u20AC"
+																									// -unicode for €
+					if (mcDonalds.isDiscountApplied()) {
+						lblDiscountImage.setVisible(true);
+					}
+					btnRemove.setEnabled(true);
+					btnNext.setEnabled(true);
+					spUnits.setValue(1);
+					txtUnitsAdded.setText(mcDonalds.getUnits(selectedProduct));
+				}
+			});
+			btnAdd.setMnemonic('A');
+			btnAdd.setToolTipText("Adds the selected item to the order");
+			btnAdd.setBackground(new Color(0, 128, 0));
+			btnAdd.setForeground(new Color(255, 255, 255));
+			btnAdd.setBounds(402, 182, 89, 23);
+		}
+		return btnAdd;
+	}
+
+	/**
+	 * 
+	 * @return the remove button
+	 */
 	private JButton getBtnRemove() {
 		if (btnRemove == null) {
 			btnRemove = new JButton("Remove");
+			btnRemove.setEnabled(false);
 			btnRemove.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
+					getMcDonalds().removeProduct((Product) cbProducts.getSelectedItem(), (Integer) spUnits.getValue());
+					if (!mcDonalds.isDiscountApplied()) {
+						lblDiscountImage.setVisible(false);
+					}
+					if (getMcDonalds().getOrderTotal() == 0) {
+						btnNext.setEnabled(false);
+						btnRemove.setEnabled(false);
+					}
+					txtPrice.setText(String.format("%.2f", mcDonalds.getOrderTotal()) + " \u20AC");
+					spUnits.setValue(1);
+					txtUnitsAdded.setText(mcDonalds.getUnits((Product) cbProducts.getSelectedItem()));
 				}
 			});
-			btnRemove.setToolTipText("Adds the selected item to the order");
+			btnRemove.setToolTipText("Elimates the selected item to the order");
 			btnRemove.setMnemonic('R');
 			btnRemove.setForeground(Color.WHITE);
 			btnRemove.setBackground(new Color(0, 128, 0));
@@ -471,28 +525,58 @@ public class MainWindow extends JFrame {
 		}
 		return btnRemove;
 	}
+
+	/**
+	 * 
+	 * @return the scrollPane that contains the text area for showing the order
+	 */
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
 			scrollPane.setBounds(439, 56, 151, 105);
-			scrollPane.setViewportView(getTextArea_1());
+			scrollPane.setViewportView(getTxtAreaOrder());
+			scrollPane.setVisible(false);
 		}
 		return scrollPane;
 	}
+
+	/**
+	 * 
+	 * @return the label that shows the order when you click on it (pressed the
+	 *         mouse)
+	 */
 	private JLabel getLblOrder() {
 		if (lblOrder == null) {
 			lblOrder = new JLabel("Order:");
-			lblOrder.setLabelFor(getTextArea_1());
+			lblOrder.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent e) {
+					scrollPane.setVisible(true);
+					txtAreaOrder.setText(getMcDonalds().getOrder());
+				}
+
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					scrollPane.setVisible(false);
+				}
+			});
+			lblOrder.setLabelFor(getTxtAreaOrder());
 			lblOrder.setIcon(new ImageIcon(MainWindow.class.getResource("/uo/cpm/p3/ui/img/pedido.png")));
 			lblOrder.setFont(new Font("Tahoma", Font.PLAIN, 15));
 			lblOrder.setBounds(457, 11, 138, 42);
 		}
 		return lblOrder;
 	}
-	private JTextArea getTextArea_1() {
+
+	/**
+	 * 
+	 * @return the text area contains and showing the information of the order
+	 */
+	private JTextArea getTxtAreaOrder() {
 		if (txtAreaOrder == null) {
 			txtAreaOrder = new JTextArea();
 			txtAreaOrder.setEditable(false);
+			txtAreaOrder.setText(getMcDonalds().getOrder());
 		}
 		return txtAreaOrder;
 	}

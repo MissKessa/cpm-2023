@@ -46,7 +46,7 @@ public class Main {
 //		mc.addToOrder(listOfProducts[0], 1);
 //		System.out.println(mc.getOrderTotal());
 //	}
-	
+
 	/**
 	 * Launch the application.
 	 */
@@ -56,20 +56,22 @@ public class Main {
 			@Override
 			public void run() {
 				try {
-					JFrame.setDefaultLookAndFeelDecorated(true); //accept change in their skin
-					JDialog.setDefaultLookAndFeelDecorated(true); //accept change in their skin
-					UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel"); //change the skin to a specific one. Looks for this class in the classpath (loaded dynamic)
-					
+					JFrame.setDefaultLookAndFeelDecorated(true); // accept change in their skin
+					JDialog.setDefaultLookAndFeelDecorated(true); // accept change in their skin
+					UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel"); // change the skin to a
+																							// specific one. Looks for
+																							// this class in the
+																							// classpath (loaded
+																							// dynamic)
+
 					MainWindow frame = new MainWindow(mcDonalds);
 					frame.setLocationRelativeTo(null);
 					frame.setVisible(true);
-					
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
 	}
-
-
 }

@@ -11,14 +11,6 @@ import uo.cpm.p3.model.Product;
  *
  */
 public class McDonalds {
-	/**
-	 * It's the percent discount if the discount is applied
-	 */
-	public final static int DISCOUNT_VALUE = 10;
-	/**
-	 * It's the price at which the discount is applied
-	 */
-	public final static float PRICE_TO_HAVE_DISCOUNT = 60;
 
 	/**
 	 * It's the menu for the McDonalds
@@ -28,10 +20,6 @@ public class McDonalds {
 	 * It's the order
 	 */
 	Order order = new Order();
-	/**
-	 * It shows if the discount is applied
-	 */
-	boolean discountApplied = false;
 
 	public McDonalds() {
 
@@ -78,13 +66,9 @@ public class McDonalds {
 
 	/**
 	 * 
-	 * @return the price (the discount is calculated if it's applied)
+	 * @return the price of the order
 	 */
-	public Object getOrderTotal() {
-		if (order.getPrice() >= PRICE_TO_HAVE_DISCOUNT) {
-			discountApplied = true;
-			return order.getPrice() * (1 - DISCOUNT_VALUE / 100);
-		}
+	public float getOrderTotal() {
 		return order.getPrice();
 	}
 
@@ -93,7 +77,7 @@ public class McDonalds {
 	 * @return if the discount is applied
 	 */
 	public boolean isDiscountApplied() {
-		return discountApplied;
+		return order.isDiscountApplied();
 	}
 
 	/**
@@ -106,6 +90,34 @@ public class McDonalds {
 			throw new IllegalArgumentException("The selected product cannot be null");
 		}
 		return "" + order.getUnits(selectedProduct);
+	}
+
+	/**
+	 * 
+	 * @return a string of the order with its information
+	 */
+	public String getOrder() {
+		return order.toString();
+	}
+
+	/**
+	 * Sets if the order is taken on site by the given parameter
+	 * 
+	 * @param orderOnSite is the parameter that sets if the order is taken on site
+	 */
+	public void setOrderOnSite(boolean orderOnSite) {
+		order.setOrderOnSite(orderOnSite);
+	}
+
+	/**
+	 * It reduces the units of a given product in the given units.
+	 * 
+	 * @param selectedItem is the given product
+	 * @param units        is the units substracted from the product
+	 */
+	public void removeProduct(Product selectedItem, int value) {
+		order.removeProduct(selectedItem, value);
+
 	}
 
 }
