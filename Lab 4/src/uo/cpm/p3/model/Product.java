@@ -134,4 +134,12 @@ public class Product {
 		}
 		return buffer.toString();
 	}
+
+	/**
+	 * 
+	 * @return a string with the name and the units of the product
+	 */
+	public String showInformation() {
+		return "" + this.name + "-" + this.units + "uds";
+	}
 }

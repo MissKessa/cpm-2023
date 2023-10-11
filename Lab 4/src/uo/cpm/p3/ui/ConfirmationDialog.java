@@ -57,7 +57,13 @@ public class ConfirmationDialog extends JDialog {
 	 * It's a reference to the parent window (registry form)
 	 */
 	private RegistryForm rF = null;
+	/**
+	 * It's the label for the price text field
+	 */
 	private JLabel lblPrice;
+	/**
+	 * It's the text field that shows the final price
+	 */
 	private JTextField txtPrice;
 
 	/**
@@ -101,7 +107,7 @@ public class ConfirmationDialog extends JDialog {
 		getTxtCode().setText(rF.getMainWindow().getMcDonalds().getOrderCode());
 		getContentPane().add(getLblPrice());
 		getContentPane().add(getTxtPrice());
-		
+
 		this.getRootPane().setDefaultButton(getBtnFinish());
 
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -140,7 +146,7 @@ public class ConfirmationDialog extends JDialog {
 
 	/**
 	 * Sets the text, foreground, background and action when you click on it (the
-	 * program ends) for the finish button
+	 * program initializes) for the finish button
 	 * 
 	 * @return the finish button
 	 */

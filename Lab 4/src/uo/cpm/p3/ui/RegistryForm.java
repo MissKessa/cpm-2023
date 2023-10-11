@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
@@ -20,8 +22,6 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 
 /**
  * This class builds the window with a user register form of an McDonalds
@@ -308,7 +308,7 @@ public class RegistryForm extends JDialog { // change it to JDialog instead of J
 			pnCustomerData.setBorder(
 					new TitledBorder(null, "Customer Information", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			pnCustomerData.setBackground(new Color(255, 255, 255));
-			pnCustomerData.setBounds(23, 41, 539, 175);
+			pnCustomerData.setBounds(23, 22, 539, 194);
 			pnCustomerData.setLayout(null);
 			pnCustomerData.add(getLblNameAndSurname());
 			pnCustomerData.add(getTxtNameAndSurname());
@@ -328,9 +328,9 @@ public class RegistryForm extends JDialog { // change it to JDialog instead of J
 	 * @return the Repeat Password Field
 	 */
 	private JPasswordField getPsswRepeatPassword() {
-		if (psswRepeatPassword==null) {
+		if (psswRepeatPassword == null) {
 			psswRepeatPassword = new JPasswordField();
-			psswRepeatPassword.setBounds(182, 132, 231, 22);
+			psswRepeatPassword.setBounds(182, 141, 231, 29);
 		}
 		return psswRepeatPassword;
 	}
@@ -341,21 +341,21 @@ public class RegistryForm extends JDialog { // change it to JDialog instead of J
 	 * @return the Password Field
 	 */
 	private JPasswordField getPsswPassword() {
-		if (psswPassword == null){
+		if (psswPassword == null) {
 			psswPassword = new JPasswordField();
 			psswPassword.addFocusListener(new FocusAdapter() {
 				@Override
 				public void focusLost(FocusEvent e) {
 					if (getPsswPassword().getPassword().length < 8) {
 						JOptionPane.showMessageDialog(rootPane, "Password should be 8 characters or more");
-						getPsswPassword().grabFocus(); //force the focus to go back to the component
+						getPsswPassword().grabFocus(); // force the focus to go back to the component
 					}
 				}
 			});
-			psswPassword.setBounds(182, 95, 231, 22);
+			psswPassword.setBounds(182, 102, 231, 31);
 		}
 		return psswPassword;
-		
+
 	}
 
 	/**
@@ -388,7 +388,7 @@ public class RegistryForm extends JDialog { // change it to JDialog instead of J
 	 * @return the radio Button for the Take away
 	 */
 	private JRadioButton getRdbtnTakeAway() {
-		if (rdbtnTakeAway==null) {
+		if (rdbtnTakeAway == null) {
 			rdbtnTakeAway = new JRadioButton("Take away");
 			buttonGroup.add(rdbtnTakeAway);
 			rdbtnTakeAway.setBackground(Color.WHITE);
@@ -396,9 +396,10 @@ public class RegistryForm extends JDialog { // change it to JDialog instead of J
 			rdbtnTakeAway.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-	//				if (rdbtnOnSite.isSelected()) {
-	//					rdbtnOnSite.setSelected(false);
-	//				}
+					// if (rdbtnOnSite.isSelected()) {
+					// rdbtnOnSite.setSelected(false);
+					// }
+					mainWindow.getMcDonalds().setOrderOnSite(false);
 				}
 			});
 		}
@@ -413,7 +414,7 @@ public class RegistryForm extends JDialog { // change it to JDialog instead of J
 	 * @return the radio Button for the On site
 	 */
 	private JRadioButton getRdbtnOnSite() {
-		if(rdbtnOnSite==null) {
+		if (rdbtnOnSite == null) {
 			rdbtnOnSite = new JRadioButton("On site");
 			rdbtnOnSite.setSelected(true);
 			buttonGroup.add(rdbtnOnSite);
@@ -422,9 +423,10 @@ public class RegistryForm extends JDialog { // change it to JDialog instead of J
 			rdbtnOnSite.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-	//				if (rdbtnTakeAway.isSelected()) {
-	//					rdbtnTakeAway.setSelected(false);
-	//				}
+					// if (rdbtnTakeAway.isSelected()) {
+					// rdbtnTakeAway.setSelected(false);
+					// }
+					mainWindow.getMcDonalds().setOrderOnSite(true);
 				}
 			});
 		}
@@ -439,7 +441,7 @@ public class RegistryForm extends JDialog { // change it to JDialog instead of J
 	private JLabel getLblNameAndSurname() {
 		if (lblNameAndSurname == null) {
 			lblNameAndSurname = new JLabel("Name and Surname:");
-			lblNameAndSurname.setBounds(21, 26, 146, 19);
+			lblNameAndSurname.setBounds(21, 23, 146, 29);
 		}
 		return lblNameAndSurname;
 	}
@@ -452,7 +454,7 @@ public class RegistryForm extends JDialog { // change it to JDialog instead of J
 	private JTextField getTxtNameAndSurname() {
 		if (txtNameAndSurname == null) {
 			txtNameAndSurname = new JTextField();
-			txtNameAndSurname.setBounds(182, 23, 231, 22);
+			txtNameAndSurname.setBounds(182, 20, 231, 32);
 			txtNameAndSurname.setColumns(10);
 		}
 		return txtNameAndSurname;
@@ -467,7 +469,7 @@ public class RegistryForm extends JDialog { // change it to JDialog instead of J
 		if (cdBirthYear == null) {
 			cdBirthYear = new JComboBox<String>();
 			cdBirthYear.setModel(new DefaultComboBoxModel<String>(setBirthOptions()));
-			cdBirthYear.setBounds(182, 54, 78, 22);
+			cdBirthYear.setBounds(182, 62, 78, 32);
 		}
 		return cdBirthYear;
 	}
@@ -496,7 +498,7 @@ public class RegistryForm extends JDialog { // change it to JDialog instead of J
 	private JLabel getLblBirthdate() {
 		if (lblBirthdate == null) {
 			lblBirthdate = new JLabel("Birthdate: ");
-			lblBirthdate.setBounds(21, 59, 146, 14);
+			lblBirthdate.setBounds(21, 67, 146, 27);
 		}
 		return lblBirthdate;
 	}
@@ -509,7 +511,7 @@ public class RegistryForm extends JDialog { // change it to JDialog instead of J
 	private JLabel getLblPassword() {
 		if (lblPassword == null) {
 			lblPassword = new JLabel("Password:");
-			lblPassword.setBounds(21, 97, 146, 20);
+			lblPassword.setBounds(21, 104, 146, 29);
 		}
 		return lblPassword;
 	}
@@ -522,18 +524,25 @@ public class RegistryForm extends JDialog { // change it to JDialog instead of J
 	private JLabel getLblRepeatPassword() {
 		if (lblRepeatPassword == null) {
 			lblRepeatPassword = new JLabel("Repeat password:");
-			lblRepeatPassword.setBounds(21, 134, 146, 20);
+			lblRepeatPassword.setBounds(21, 143, 146, 27);
 		}
 		return lblRepeatPassword;
 	}
 
+	/**
+	 * 
+	 * @return the reference to the main window
+	 */
 	public MainWindow getMainWindow() {
 		return mainWindow;
 	}
 
+	/**
+	 * 
+	 * @return the reference to the confirmation dialog
+	 */
 	public ConfirmationDialog getcD() {
 		return cD;
 	}
-	
-	
+
 }

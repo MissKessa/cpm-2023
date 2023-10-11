@@ -13,6 +13,14 @@ import uo.cpm.p3.util.FileUtil;
  *
  */
 public class Order {
+	/**
+	 * It's the percent discount if the discount is applied
+	 */
+	public final static int DISCOUNT_VALUE = 10;
+	/**
+	 * It's the price at which the discount is applied
+	 */
+	public final static float PRICE_TO_HAVE_DISCOUNT = 60;
 
 	/**
 	 * It's the list of products of the order
@@ -22,6 +30,16 @@ public class Order {
 	 * It's the code to identify the order
 	 */
 	private String code = "";
+
+	/**
+	 * It shows if the discount is applied
+	 */
+	boolean discountApplied = false;
+
+	/**
+	 * It indicates if the order is going to be taken on site or not
+	 */
+	boolean orderOnSite = true;
 
 	/**
 	 * Main constructor: it generates the code
@@ -76,14 +94,37 @@ public class Order {
 		for (Product a : orderList) {
 			total += a.getPrice() * a.getUnits();
 		}
+		if (total >= PRICE_TO_HAVE_DISCOUNT) {
+			discountApplied = true;
+			return total * (1 - DISCOUNT_VALUE / 100);
+		} else {
+			discountApplied = false;
+		}
 		return total;
+	}
+
+	/**
+	 * 
+	 * @return if the discount is applied
+	 */
+	public boolean isDiscountApplied() {
+		return discountApplied;
+	}
+
+	/**
+	 * Sets if the order is taken on site by the given parameter
+	 * 
+	 * @param orderOnSite is the parameter that sets if the order is taken on site
+	 */
+	public void setOrderOnSite(boolean orderOnSite) {
+		this.orderOnSite = orderOnSite;
 	}
 
 	/**
 	 * Saves in a file with the name of the code, all the products in the order list
 	 */
 	public void saveOrder() {
-		FileUtil.saveToFile(code, orderList);
+		FileUtil.saveToFile(code, orderList, orderOnSite);
 	}
 
 	/**
@@ -117,5 +158,44 @@ public class Order {
 			}
 		}
 		return 0;
+	}
+
+	/**
+	 * @return a string that shows the information of the order: the information of
+	 *         the products and the total price
+	 */
+	@Override
+	public String toString() {
+		String order = "";
+		for (Product product : orderList) {
+			order += product.showInformation() + "\n";
+		}
+		order += "Total: " + (String.format("%.2f", getPrice()) + " \u20AC");
+		return order;
+
+	}
+
+	/**
+	 * It reduces the units of a given product in the given units.
+	 * 
+	 * @param selectedItem is the given product
+	 * @param units        is the units substracted from the product
+	 */
+	public void removeProduct(Product selectedItem, int units) {
+		Product itemInOrder = null;
+		if (selectedItem != null) {
+			for (Product a : orderList) {
+				if (a.getCode().equals(selectedItem.getCode())) {
+					itemInOrder = a;
+					itemInOrder.setUnits(itemInOrder.getUnits() - units);
+					if (itemInOrder.getUnits() <= 0) {
+						orderList.remove(itemInOrder);
+					}
+					break;
+				}
+			}
+
+		}
+
 	}
 }
