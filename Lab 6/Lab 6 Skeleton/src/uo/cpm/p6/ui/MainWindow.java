@@ -7,6 +7,8 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -50,6 +52,14 @@ public class MainWindow extends JFrame {
 	private JMenuItem mntmExit;
 
 	public MainWindow(SpaceInvaders game) {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				if (checkExit()) {
+					System.exit(0);
+				}
+			}
+		});
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/img/invader.jpg")));
 		setResizable(false);
 		setTitle("Space Invasion!!");
@@ -384,8 +394,33 @@ public class MainWindow extends JFrame {
 	private JMenuItem getMntmNewGame() {
 		if (mntmNewGame == null) {
 			mntmNewGame = new JMenuItem("New game");
+			mntmNewGame.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (checkNewGame())
+						initialize();
+				}
+
+			});
 		}
 		return mntmNewGame;
+	}
+
+	private void initialize() {
+		game = new SpaceInvaders();
+		// initGame();
+		while (pnShots.getComponentCount() != 0) {
+			removeShot();
+		}
+		for (int i = 0; i < pnBoard.getComponentCount(); i++) {
+			pnBoard.getComponent(i).setEnabled(false);
+			((JButton) pnBoard.getComponent(i)).setIcon(null);
+			((JButton) pnBoard.getComponent(i)).setDisabledIcon(null);
+		}
+		btnDice.setEnabled(true);
+		txtScore.setText("0");
+		enableBoard(false);
+		validate();
+
 	}
 
 	private JSeparator getSeparator() {
@@ -397,8 +432,33 @@ public class MainWindow extends JFrame {
 
 	private JMenuItem getMntmExit() {
 		if (mntmExit == null) {
-			mntmExit = new JMenuItem("New menu item");
+			mntmExit = new JMenuItem("Exit");
+			mntmExit.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (checkExit()) {
+						System.exit(0);
+					}
+				}
+			});
 		}
 		return mntmExit;
+	}
+
+	private boolean checkExit() {
+		if (JOptionPane.showConfirmDialog(this,
+				"Are you sure you want to leave and end the game?") == JOptionPane.YES_OPTION) {
+			return true;
+		}
+		return false;
+
+	}
+
+	private boolean checkNewGame() {
+		if (JOptionPane.showConfirmDialog(this,
+				"Are you sure you want to end this game and start a new one?") == JOptionPane.YES_OPTION) {
+			return true;
+		}
+		return false;
+
 	}
 }
