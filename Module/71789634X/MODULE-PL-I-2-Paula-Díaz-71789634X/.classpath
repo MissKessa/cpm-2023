@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="libraries/jcalendar-1.4.jar"/>
+	<classpathentry kind="lib" path="libraries/jgoodies-common-1.2.0.jar"/>
+	<classpathentry kind="lib" path="libraries/jgoodies-looks-2.4.1.jar"/>
+	<classpathentry kind="lib" path="libraries/jhall.jar"/>
+	<classpathentry kind="lib" path="libraries/basicplayer3.0.jar"/>
+	<classpathentry kind="lib" path="libraries/commons-logging-api.jar"/>
+	<classpathentry kind="lib" path="libraries/jl1.0.jar"/>
+	<classpathentry kind="lib" path="libraries/jogg-0.0.7.jar"/>
+	<classpathentry kind="lib" path="libraries/mp3spi1.9.4.jar"/>
+	<classpathentry kind="lib" path="libraries/substance.jar"/>
+	<classpathentry kind="lib" path="libraries/tritonus_share.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -1,0 +1,30 @@
+//PASO 1 DRAG AND DROP
+	class ProcesaDrag extends MouseAdapter {
+	       public void mousePressed(MouseEvent e) {
+	            JComponent c = (JComponent) e.getSource();
+	            TransferHandler handler = c.getTransferHandler();
+	            handler.exportAsDrag(c, e, TransferHandler.COPY);
+	        }
+	    }
+	
+	
+// PASO 6 DRAG AND DROP
+	class ProcesaLabelTablero implements PropertyChangeListener {
+		public void propertyChange(PropertyChangeEvent e) {
+			if (e.getPropertyName().equals("icon")  && (e.getNewValue() != null) && (e.getNewValue().toString().contains("shoot.png"))) {
+				JLabel lbPulsada = (JLabel) e.getSource();				
+				lbPulsada.setTransferHandler(null);  // para evitar soltar sobre una casilla que ya esta ocupada
+				int posicion = Integer.parseInt(lbPulsada.getText());
+				dispara(posicion);
+			}
+		}
+	}
+	
+//PASO 9 DRAG AND DROP
+	private void despintaTablero() {
+		for (int i=0;i<getPnTablero().getComponents().length; i++) {
+			((JLabel)getPnTablero().getComponents()[i]).setIcon(null);
+			((JLabel)getPnTablero().getComponents()[i]).setTransferHandler(new TransferHandler("icon"));
+		}
+	}
+		
