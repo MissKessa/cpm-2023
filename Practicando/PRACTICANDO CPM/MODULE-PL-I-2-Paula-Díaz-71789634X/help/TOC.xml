@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!DOCTYPE toc
+  PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp TOC Version 1.0//EN"
+         "http://java.sun.com/products/javahelp/toc_1_0.dtd">
+
+<toc version="1.0">
+  
+  <tocitem text="Castlevania" target="intro"/>
+  <tocitem text="Changing the language" target="langu"/>
+  <tocitem text="Filtering the castles" target="filter"/>
+  <tocitem text="Gain discounts">
+	  <tocitem text="Playing the game" target="play"/>
+	  <tocitem text="Saving a discount" target="save"/>
+  </tocitem>
+
+  <tocitem text="Making a reservation">
+  	  <tocitem text="Formalizing" target="formal"/>
+	  <tocitem text="Formalization warning" target="warn"/>
+	  <tocitem text="Reserving" target="reserv"/>
+	  <tocitem text="See castle detailed information" target="castle w"/>
+  </tocitem>
+ 
+ 
+</toc>

@@ -1,0 +1,33 @@
+//METODOS UTILIZADOS EN PRÁCTICAS que se pueden emplear (así mismo o con modificaciones) en el examen
+
+// Método que convierte una lista en un array
+public Articulo[] getArticulos(){
+	Articulo[] articulos = listaArticulos.toArray(new Articulo[listaArticulos.size()]);
+	return articulos;	
+}
+
+// Método que añade un elemento a una lista actualizando un campo numérico
+public void add (Articulo articuloDelCatalogo, int unidades){
+		Articulo articuloEnPedido = null;
+	
+		for (Articulo a : listaPedido){
+			if (a.getCodigo().equals(articuloDelCatalogo.getCodigo()))
+				articuloEnPedido = a;
+		}
+		
+		if (articuloEnPedido == null){
+			Articulo articuloAPedido = new Articulo(articuloDelCatalogo);
+			articuloAPedido.setUnidades(unidades);
+			listaPedido.add(articuloAPedido);
+		}
+		else {
+			int totalUnidades = articuloEnPedido.getUnidades() + unidades;
+			articuloEnPedido.setUnidades(totalUnidades);
+		}
+	}
+
+
+// Método para lanzar un dado
+public static int lanzar() { 
+	return ((int) (Math.random() * Juego.maxDisparos) + 1);
+ }

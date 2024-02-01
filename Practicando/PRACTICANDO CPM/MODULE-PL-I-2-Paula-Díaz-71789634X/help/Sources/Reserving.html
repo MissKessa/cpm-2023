@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>Reserving</title>
+</head>
+
+<body>
+	<h1>Reserving</h1>
+	<p>You will see:</p>
+	<br>
+	<img src ="img/Reservation window.png">
+	<br>
+	<ul>
+		<li> Summary of all the castle information with:
+		<ul>
+			<li> Name of the castle
+			<li> Country of the castle
+			<li> Enchantments of the castle
+			<li> Room price of the castle
+		</ul>
+		<li> Form to fill to make the reservation:
+		<ul>
+			<li> Id
+			<li> Number of people
+			<li> Number of rooms
+			<li> Number of days
+			<li> Starting date
+		</ul>
+	</ul>
+	
+	<p>For making the reservation, you must mark the checkbox checking that you are 18 or older.</p>
+	<p>If you don't mark it this window will be shown:</p>
+	<br>
+	<img src ="img/Reservation window_Warning legal age.png">
+	<br>
+	<p>You can click:</p>
+	<ul>
+			<li> <strong>Ok</strong>: You will be back to the reservation window to mark the checkbox
+			<li> <strong>Cancel</strong>: You will go back to the <a href=Castle_window.html>castle window</a>
+	</ul>
+	
+	<h2>Filling the form</h2>
+	
+	<h3>The id and claiming discounts</h3>
+	<p>When an id is written, it's checked if it has a discount associated.</p>
+	<p>If it has a discount, the <strong>Claim discount</strong> button will be enabled to use the discount if the user wants</p>
+	<p>When the discount is used, the final price will be recalculated</p>
+	<br>
+	
+	<h3>The number of people and rooms</h3>
+	<p>You can chose the number of people you want, and it won't affect the final price</p>
+	<p>The number of rooms will be limited by the number of people. There cannot be more than 2 people in a room, or more rooms than people</p>
+	<br>
+	
+	<h3>The number of days and the starting date</h3>
+	<p>You can chose any number of days, but the starting date has to be at least the current date</p>
+	<br>
+	<h2>Ending the reservation</h2>
+	<p>You can:</p>
+	<ul>
+			<li> <strong>Formalize</strong>: When the id is filled, and you will go to the <a href=Formalization_warning.html>formalization warning window</a>
+			<li> <strong>Back</strong>: You will go back to the <a href=Castle_window.html>castle window</a>, and the information of the form filled will be keep
+	</ul>
+</body>
+
+</html>
